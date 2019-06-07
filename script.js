@@ -34,7 +34,7 @@ scene.add(amb);
 scene.add(light);
 scene.add(helper);
 const loader = new THREE.TextureLoader();
-const bgTexture = loader.load('forster.jpg');
+const bgTexture = loader.load('back.jpg');
 scene.background = bgTexture;
 
 planegeom = new THREE.PlaneGeometry(50, 50)
