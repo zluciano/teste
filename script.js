@@ -89,7 +89,7 @@ text2.style.fontSize = "50px"
 text2.style.top = 200 + 'px'
 text2.style.left = 500 + 'px'
 text2.style.color = "#ff0000"
-//text2.style.backgroundImage = "url('forster.jpg')"
+//text2.style.backgroundImage = "url('back.jpg')"
 text2.style.opacity = "0"
 document.body.appendChild(text2);
 
