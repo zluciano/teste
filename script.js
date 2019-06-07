@@ -34,8 +34,20 @@ scene.add(amb);
 scene.add(light);
 scene.add(helper);
 const loader = new THREE.TextureLoader();
-const bgTexture = loader.load('back.jpg');
+const bgTexture = loader.load('forster.jpg');
 scene.background = bgTexture;
+
+var listener = new THREE.AudioListener();
+camera.add( listener );
+var sound = new THREE.Audio( listener );
+
+var audioLoader = new THREE.AudioLoader();
+audioLoader.load( '8bit.mp3', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.5 );
+	sound.play();
+});
 
 planegeom = new THREE.PlaneGeometry(50, 50)
 planemat = new THREE.MeshLambertMaterial({color: 0xffa500});
@@ -89,7 +101,7 @@ text2.style.fontSize = "50px"
 text2.style.top = 200 + 'px'
 text2.style.left = 500 + 'px'
 text2.style.color = "#ff0000"
-//text2.style.backgroundImage = "url('back.jpg')"
+//text2.style.backgroundImage = "url('forster.jpg')"
 text2.style.opacity = "0"
 document.body.appendChild(text2);
 
