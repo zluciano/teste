@@ -34,24 +34,32 @@ scene.add(amb);
 scene.add(light);
 scene.add(helper);
 const loader = new THREE.TextureLoader();
-const bgTexture = loader.load('forster.jpg');
+const bgTexture = loader.load('back.jpg');
 scene.background = bgTexture;
+
+const loaderFloor = new THREE.TextureLoader();
+const textureFloor = loaderFloor.load('floor.jpg');
+planeMat = new THREE.MeshLambertMaterial({ map : textureFloor })
+
+const loaderWall = new THREE.TextureLoader();
+const textureWall = loaderWall.load('wall.jpg');
+wallMat = new THREE.MeshLambertMaterial({ map : textureWall })
 
 var listener = new THREE.AudioListener();
 camera.add( listener );
 var sound = new THREE.Audio( listener );
 
 var audioLoader = new THREE.AudioLoader();
-audioLoader.load( '8bit.mp3', function( buffer ) {
-	sound.setBuffer( buffer );
-	sound.setLoop( true );
-	sound.setVolume( 0.5 );
-	sound.play();
+
+audioLoader.load( 'fight.mp3', function( buffer ) {
+  sound.setBuffer( buffer );
+  sound.setLoop( true );
+  sound.setVolume( 0.5 );
+  sound.play();
 });
 
 planegeom = new THREE.PlaneGeometry(50, 50)
-planemat = new THREE.MeshLambertMaterial({color: 0xffa500});
-plane = new THREE.Mesh(planegeom, planemat);
+plane = new THREE.Mesh(planegeom, planeMat);
 plane.castShadow = true; //default is false
 plane.receiveShadow = true;
 
@@ -119,7 +127,7 @@ console.log(text2.style)
 
 var borders = new THREE.Group();
 var getBorder = (pos_x,pos_y,pos_z,x,y,z, rot_x) => {
-  var border = new THREE.Mesh(new THREE.BoxGeometry(x,y,z), new THREE.MeshLambertMaterial({color: 0xffa500}));
+  var border = new THREE.Mesh(new THREE.BoxGeometry(x,y,z), new THREE.MeshLambertMaterial({ map : textureWall }));
   border.position.x = pos_x
   border.position.y = pos_y
   border.position.z = pos_z
@@ -354,6 +362,13 @@ var animate = function() {
 
       if( win(sphere, cylinder) ) {
         winner = true
+        sound.stop();
+        audioLoader.load( '8bit.mp3', function( buffer ) {
+          sound.setBuffer( buffer );
+          sound.setLoop( true );
+          sound.setVolume( 0.5 );
+          sound.play();
+        });
       }
 
       //sphere_velocity = -(sphere.position.z - safe[0].position.z)/100
@@ -368,6 +383,15 @@ var animate = function() {
         sphere.position.x += vmax
     }
     else if(!winner){
+      if(t==0) {
+        sound.stop();
+        audioLoader.load( 'sad.mp3', function( buffer ) {
+          sound.setBuffer( buffer );
+          sound.setLoop( true );
+          sound.setVolume( 0.5 );
+          sound.play();
+        });
+      }
       if(t<1) {
         camera.position.x = 40*(1-t) + t * sphere.position.x
         camera.position.y = 40*(1-t) + t * (sphere.position.y + 25)
@@ -405,6 +429,7 @@ var animate = function() {
       if(t<=1) {
         cylinder.material.color.b = t
         sphere.material.color.r = 1-t
+        text3.style.opacity = t
       }
       else {
         sphere.position.y += t-1
